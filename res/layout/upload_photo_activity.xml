@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/login_background"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dip"
+        android:background="@drawable/global_top_background" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/info_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:maxWidth="150dip"
+                android:padding="8dip"
+                android:singleLine="true"
+                android:text="上传下载"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
+        </LinearLayout>
+                <Button
+            android:id="@+id/review_photo_button"
+            android:layout_width="48dip"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="8dip"
+            android:layout_marginRight="8dip"
+            android:layout_marginTop="8dip"
+            android:background="@drawable/avartar_submit_button"
+            android:text="展示"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" >
+
+                <RelativeLayout
+                    android:id="@+id/info_avatar_layout"
+                    android:layout_width="120dip"
+                    android:layout_height="100dip" >
+
+                    <ImageView
+                        android:id="@+id/avatar_upload_img"
+                        android:layout_width="100dip"
+                        android:layout_height="100dip"
+                        android:layout_margin="8dip"
+                        android:background="@drawable/avatar_background_white"
+                        android:padding="4dip"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/avatar_default" />
+
+                    <Button
+                        android:id="@+id/avatar_upload_change"
+                        android:layout_width="40dip"
+                        android:layout_height="40dip"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/avatar_button_change_logo" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:gravity="center" >
+
+                <Button
+                    android:id="@+id/avatar_upload"
+                    android:layout_width="100dip"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/avartar_submit_button"
+                    android:text="上传"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+            
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dip"
+                android:layout_marginRight="8dip"
+                android:layout_marginTop="20dip"
+                android:background="@drawable/about_top_bg"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dip" >
+
+                <TextView
+                    android:layout_width="60dip"
+                    android:layout_height="30dip"
+                    android:layout_marginLeft="8dip"
+                    android:gravity="center_vertical"
+                    android:text="路径"
+                    android:textColor="#222222"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/avatar_url"
+                    android:layout_width="fill_parent"
+                    android:layout_height="50dip"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="8dip"
+                    android:textColor="#333333"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" >
+
+                <RelativeLayout
+                    android:layout_width="120dip"
+                    android:layout_height="100dip" >
+
+                    <ImageView
+                        android:id="@+id/avatar_download_img"
+                        android:layout_width="100dip"
+                        android:layout_height="100dip"
+                        android:layout_margin="8dip"
+                        android:background="@drawable/avatar_background_white"
+                        android:padding="4dip"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/avatar_default" />
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:gravity="center" >
+
+                <Button
+                    android:id="@+id/avatar_download"
+                    android:layout_width="100dip"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/avartar_submit_button"
+                    android:text="下载"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </LinearLayout>
+        
+        
+    </ScrollView>
+
+</LinearLayout>
