@@ -52,23 +52,26 @@ public class UploadPhotoActivity extends Activity {
 	private Button mAvatarChangeBtn;
 
 	/**
-	 * 头像图片
-	 */
-	private ImageView mAvatarUploadImg;
-	private Button mAvatarDownload;
-	private ImageView mAvatarDownloadImg;
-	/**
 	 * 提交按钮
 	 */
 	private Button mUploadBtn;
+	/**
+	 * 头像图片
+	 */
+	private ImageView mAvatarUploadImg;
+	/**
+	 * 下载按钮
+	 */
+	private Button mAvatarDownload;
+	/**
+	 * 下载图片
+	 */
+	private ImageView mAvatarDownloadImg;
 
 	/**
 	 * 图片展示按钮
 	 */
 	private Button mReviewPhotoBtn;
-	/**
-	 * 下载按钮
-	 */
 
 	// 用户照相路径
 	private String photoPath;
@@ -76,7 +79,7 @@ public class UploadPhotoActivity extends Activity {
 	private String avatarPath;
 
 	// 上传头像后保存下来的URL
-	private EditText avatarURL;
+	private EditText avatarURLEditText;
 
 	public static final String SDCARD_URL = "/sdcard/MiniSkirt/Camera/";
 
@@ -88,6 +91,8 @@ public class UploadPhotoActivity extends Activity {
 	 * 退出间隔
 	 */
 	private static final int INTERVAL = 2000;
+	
+	///////////////////////////////////////////////////////////////////////
 
 	String SD_CARD_TEMP_DIR = Environment.getExternalStorageDirectory()
 			+ File.separator + "tmpPhoto1.jpg";
@@ -111,7 +116,8 @@ public class UploadPhotoActivity extends Activity {
 		parentFilePath = getBaseContext().getFilesDir().toString();
 		;
 		findViewById();
-		mAvatarUploadImg.setOnClickListener(portraitListener);
+//		mAvatarUploadImg.setOnClickListener(portraitListener);
+		mAvatarChangeBtn.setOnClickListener(portraitListener);
 		mUploadBtn.setOnClickListener(uploadListener);
 		mAvatarDownload.setOnClickListener(downloadListener);
 
@@ -121,7 +127,7 @@ public class UploadPhotoActivity extends Activity {
 		mUploadBtn = (Button) findViewById(R.id.avatar_upload);
 		mAvatarChangeBtn = (Button) findViewById(R.id.avatar_upload_change);
 		mAvatarUploadImg = (ImageView) findViewById(R.id.avatar_upload_img);
-		avatarURL = (EditText) findViewById(R.id.avatar_url);
+		avatarURLEditText = (EditText) findViewById(R.id.avatar_url);
 		mAvatarDownload = (Button) findViewById(R.id.avatar_download);
 		mAvatarDownloadImg = (ImageView) findViewById(R.id.avatar_download_img);
 		mReviewPhotoBtn = (Button) findViewById(R.id.review_photo_button);
@@ -285,6 +291,7 @@ public class UploadPhotoActivity extends Activity {
 				InputStream is = urlConn.getInputStream();
 				Bitmap image = BitmapFactory.decodeStream(is);
 				mAvatarDownloadImg.setImageBitmap(image);
+				Toast.makeText(UploadPhotoActivity.this, "下载成功", Toast.LENGTH_SHORT).show();
 				is.close();
 				urlConn.disconnect();
 			} catch (Exception e) {
@@ -304,6 +311,11 @@ public class UploadPhotoActivity extends Activity {
 				HttpClient httpClient = new DefaultHttpClient();
 				MultipartEntity mpEntity = new MultipartEntity(
 						HttpMultipartMode.BROWSER_COMPATIBLE);
+				avatarPath = getBaseContext()
+						.getFilesDir().toString()
+						+ File.separator
+						+ picName
+						+ ".jpg";
 				mpEntity.addPart("file", new FileBody(new File(getBaseContext()
 						.getFilesDir().toString()
 						+ File.separator
@@ -325,6 +337,8 @@ public class UploadPhotoActivity extends Activity {
 				Log.d("test", String.valueOf(response.getStatusLine()
 						.getStatusCode()));
 				JSONObject json = new JSONObject(out);
+				avatarURLEditText.setText(avatarPath);
+				Toast.makeText(UploadPhotoActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
 				// newestPicId = json.getString("id");
 			} catch (Exception e) {
 				Log.d("test", "error");
@@ -333,188 +347,17 @@ public class UploadPhotoActivity extends Activity {
 		}
 	};
 
-	// private void setListener() {
-	// // 跳转到图片展示页面
-	// mReviewPhotoBtn.setOnClickListener(new OnClickListener() {
-	//
-	// @Override
-	// public void onClick(View v) {
-	// startActivity(new Intent(UploadPhotoActivity.this,
-	// ReviewPhotoActivity.class));
-	// finish();
-	// }
-	// });
-	//
-	// // 提交按钮监听
-	// mUploadBtn.setOnClickListener(new OnClickListener() {
-	//
-	// @Override
-	// public void onClick(View v) {
-	// //自己实现与后台的交互
-	// }
-	// });
-	//
-	// // 头像按钮监听-TODO:这个调试起来还有点问题
-	// mAvatarChangeBtn.setOnClickListener(new OnClickListener() {
-	// //可以实现截图和现实，将头像照片保存在了avatarPath下
-	// public void onClick(View v) {
-	// new
-	// AlertDialog.Builder(UploadPhotoActivity.this).setTitle("上传头像").setItems(new
-	// String[] { "拍照上传", "上传手机中的照片" }, new DialogInterface.OnClickListener() {
-	//
-	// public void onClick(DialogInterface dialog, int which) {
-	// Intent intent = null;
-	// switch (which) {
-	// case 0:
-	// intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-	// File dir = new File(SDCARD_URL);
-	// if (!dir.exists()) {
-	// dir.mkdirs();
-	// }
-	// photoPath = SDCARD_URL + UUID.randomUUID().toString() + "-photo.jpg";
-	// File file = new File(photoPath);
-	// if (!file.exists()) {
-	// try {
-	// file.createNewFile();
-	// } catch (IOException e) {
-	//
-	// }
-	// }
-	// intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-	// startActivityForResult(intent,
-	// ActivityForResultUtil.REQUESTCODE_UPLOADAVATAR_CAMERA);
-	// break;
-	//
-	// case 1:
-	// intent = new Intent(Intent.ACTION_PICK, null);
-	// intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-	// "image/*");
-	// startActivityForResult(intent,
-	// ActivityForResultUtil.REQUESTCODE_UPLOADAVATAR_LOCATION);
-	// break;
-	// }
-	// }
-	// }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-	//
-	// public void onClick(DialogInterface dialog, int which) {
-	// dialog.cancel();
-	// }
-	// }).create().show();
-	// }
-	//
-	// });
-	// }
-	//
-	//
-	// @Override
-	// protected void onActivityResult(int requestCode, int resultCode, Intent
-	// data) {
-	// super.onActivityResult(requestCode, resultCode, data);
-	//
-	// switch (requestCode) {
-	// /**
-	// * 通过照相修改头像
-	// */
-	// case ActivityForResultUtil.REQUESTCODE_UPLOADAVATAR_CAMERA:
-	// if (resultCode == RESULT_OK) {
-	// if (!Environment.getExternalStorageState().equals(
-	// Environment.MEDIA_MOUNTED)) {
-	// Toast.makeText(this, "SD卡不可用", Toast.LENGTH_SHORT).show();
-	// return;
-	// }
-	// File file = new File(photoPath);
-	// startPhotoZoom(Uri.fromFile(file));
-	// } else {
-	// Toast.makeText(this, "取消上传", Toast.LENGTH_SHORT).show();
-	// }
-	// break;
-	// /**
-	// * 通过本地修改头像
-	// */
-	// case ActivityForResultUtil.REQUESTCODE_UPLOADAVATAR_LOCATION:
-	// Uri uri = null;
-	// if (data == null) {
-	// Toast.makeText(this, "取消上传", Toast.LENGTH_SHORT).show();
-	// return;
-	// }
-	// if (resultCode == RESULT_OK) {
-	// if (!Environment.getExternalStorageState().equals(
-	// Environment.MEDIA_MOUNTED)) {
-	// Toast.makeText(this, "SD卡不可用", Toast.LENGTH_SHORT).show();
-	// return;
-	// }
-	// uri = data.getData();
-	// startPhotoZoom(uri);
-	// } else {
-	// Toast.makeText(this, "照片获取失败", Toast.LENGTH_SHORT).show();
-	// }
-	// break;
-	// /**
-	// * 裁剪修改的头像
-	// */
-	// case ActivityForResultUtil.REQUESTCODE_UPLOADAVATAR_CROP:
-	// if (data == null) {
-	// Toast.makeText(this, "取消上传", Toast.LENGTH_SHORT).show();
-	// return;
-	// } else {
-	// saveCropPhoto(data);
-	// }
-	// break;
-	// }
-	// }
-	//
-	// /**
-	// * 系统裁剪照片
-	// *
-	// * @param uri
-	// */
-	// private void startPhotoZoom(Uri uri) {
-	// Intent intent = new Intent("com.android.camera.action.CROP");
-	// intent.setDataAndType(uri, "image/*");
-	// intent.putExtra("crop", "true");
-	// intent.putExtra("aspectX", 1);
-	// intent.putExtra("aspectY", 1);
-	// intent.putExtra("outputX", 200);
-	// intent.putExtra("outputY", 200);
-	// intent.putExtra("scale", true);
-	// intent.putExtra("noFaceDetection", true);
-	// intent.putExtra("return-data", true);
-	// startActivityForResult(intent,
-	// ActivityForResultUtil.REQUESTCODE_UPLOADAVATAR_CROP);
-	// }
-	//
-	// /**
-	// * 保存裁剪的照像
-	// *
-	// * @param data
-	// */
-	// private void saveCropPhoto(Intent data) {
-	// Bundle extras = data.getExtras();
-	// if (extras != null) {
-	// Bitmap bitmap = extras.getParcelable("data");
-	// bitmap = PhotoUtil.toRoundCorner(bitmap, 15);
-	// if (bitmap != null) {
-	// avatarPath = SDCARD_URL + UUID.randomUUID().toString() +
-	// "-avatar.jpg";//头像路径
-	// PhotoUtil.saveToSDCard(bitmap, avatarPath);
-	// mAvatarUploadImg.setImageBitmap(bitmap);
-	// }
-	// } else {
-	// Toast.makeText(this, "获取裁剪照片错误", Toast.LENGTH_SHORT).show();
-	// }
-	// }
-	//
-	// /**
-	// * 返回键监听
-	// */
-	// public void onBackPressed() {
-	// if (System.currentTimeMillis() - mExitTime > INTERVAL) {
-	// Toast.makeText(this, "再按一次返回键,可直接退出程序", Toast.LENGTH_SHORT).show();
-	// mExitTime = System.currentTimeMillis();
-	// } else {
-	// finish();
-	// android.os.Process.killProcess(android.os.Process.myPid());
-	// System.exit(0);
-	// }
-	// }
+	 /**
+	 * 返回键监听
+	 */
+	 public void onBackPressed() {
+	 if (System.currentTimeMillis() - mExitTime > INTERVAL) {
+	 Toast.makeText(this, "再按一次返回键,可直接退出程序", Toast.LENGTH_SHORT).show();
+	 mExitTime = System.currentTimeMillis();
+	 } else {
+	 finish();
+	 android.os.Process.killProcess(android.os.Process.myPid());
+	 System.exit(0);
+	 }
+	 }
 }

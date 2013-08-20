@@ -82,8 +82,11 @@ public class RegisterActivity extends Activity {
 					// startActivity(new
 					// Intent(RegisterActivity.this,LoginActivity.class));
 					if(!result.contains("Error Response")) {
+						Toast.makeText(RegisterActivity.this, "注册成功，跳转到登陆界面", Toast.LENGTH_LONG).show();
 						startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
 						finish();
+					} else {
+						Toast.makeText(RegisterActivity.this, "注册失败！", Toast.LENGTH_LONG).show();
 					}
 //					startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
 //					finish();

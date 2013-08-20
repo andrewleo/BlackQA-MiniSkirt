@@ -37,7 +37,7 @@
             android:layout_marginRight="8dip"
             android:layout_marginTop="8dip"
             android:background="@drawable/avartar_submit_button"
-            android:text="展示"
+            android:text="分享"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold" />
