@@ -32,6 +32,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -91,8 +92,8 @@ public class UploadPhotoActivity extends Activity {
 	 * 退出间隔
 	 */
 	private static final int INTERVAL = 2000;
-	
-	///////////////////////////////////////////////////////////////////////
+
+	// /////////////////////////////////////////////////////////////////////
 
 	String SD_CARD_TEMP_DIR = Environment.getExternalStorageDirectory()
 			+ File.separator + "tmpPhoto1.jpg";
@@ -116,11 +117,11 @@ public class UploadPhotoActivity extends Activity {
 		parentFilePath = getBaseContext().getFilesDir().toString();
 		;
 		findViewById();
-//		mAvatarUploadImg.setOnClickListener(portraitListener);
+		// mAvatarUploadImg.setOnClickListener(portraitListener);
 		mAvatarChangeBtn.setOnClickListener(portraitListener);
 		mUploadBtn.setOnClickListener(uploadListener);
 		mAvatarDownload.setOnClickListener(downloadListener);
-
+		mReviewPhotoBtn.setOnClickListener(shareListener);
 	}
 
 	private void findViewById() {
@@ -271,11 +272,12 @@ public class UploadPhotoActivity extends Activity {
 				in.close();
 				urlConn1.disconnect();
 				Log.d("miniskirt", result);
-				if("[]".equals(result.trim())){
-					Toast.makeText(UploadPhotoActivity.this, "无可下载的图片", Toast.LENGTH_SHORT).show();
-					
+				if ("[]".equals(result.trim())) {
+					Toast.makeText(UploadPhotoActivity.this, "无可下载的图片",
+							Toast.LENGTH_SHORT).show();
+
 				}
-				
+
 				JSONArray array = new JSONArray(result);
 				int len = array.length();
 
@@ -291,7 +293,8 @@ public class UploadPhotoActivity extends Activity {
 				InputStream is = urlConn.getInputStream();
 				Bitmap image = BitmapFactory.decodeStream(is);
 				mAvatarDownloadImg.setImageBitmap(image);
-				Toast.makeText(UploadPhotoActivity.this, "下载成功", Toast.LENGTH_SHORT).show();
+				Toast.makeText(UploadPhotoActivity.this, "下载成功",
+						Toast.LENGTH_SHORT).show();
 				is.close();
 				urlConn.disconnect();
 			} catch (Exception e) {
@@ -311,11 +314,8 @@ public class UploadPhotoActivity extends Activity {
 				HttpClient httpClient = new DefaultHttpClient();
 				MultipartEntity mpEntity = new MultipartEntity(
 						HttpMultipartMode.BROWSER_COMPATIBLE);
-				avatarPath = getBaseContext()
-						.getFilesDir().toString()
-						+ File.separator
-						+ picName
-						+ ".jpg";
+				avatarPath = getBaseContext().getFilesDir().toString()
+						+ File.separator + picName + ".jpg";
 				mpEntity.addPart("file", new FileBody(new File(getBaseContext()
 						.getFilesDir().toString()
 						+ File.separator
@@ -338,7 +338,8 @@ public class UploadPhotoActivity extends Activity {
 						.getStatusCode()));
 				JSONObject json = new JSONObject(out);
 				avatarURLEditText.setText(avatarPath);
-				Toast.makeText(UploadPhotoActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+				Toast.makeText(UploadPhotoActivity.this, "上传成功",
+						Toast.LENGTH_SHORT).show();
 				// newestPicId = json.getString("id");
 			} catch (Exception e) {
 				Log.d("test", "error");
@@ -346,18 +347,31 @@ public class UploadPhotoActivity extends Activity {
 			}
 		}
 	};
+	// 分享
+	private OnClickListener shareListener = new OnClickListener() {
+		public void onClick(View v) {
+			Intent intent = new Intent(Intent.ACTION_SEND);
+			intent.setType("image/*");
+			intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
+			intent.putExtra(Intent.EXTRA_STREAM,
+					Uri.fromFile(new File(avatarPath)));
+			intent.putExtra(Intent.EXTRA_TEXT, "可以分享了");
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(Intent.createChooser(intent, getTitle()));
+		}
+	};
 
-	 /**
+	/**
 	 * 返回键监听
 	 */
-	 public void onBackPressed() {
-	 if (System.currentTimeMillis() - mExitTime > INTERVAL) {
-	 Toast.makeText(this, "再按一次返回键,可直接退出程序", Toast.LENGTH_SHORT).show();
-	 mExitTime = System.currentTimeMillis();
-	 } else {
-	 finish();
-	 android.os.Process.killProcess(android.os.Process.myPid());
-	 System.exit(0);
-	 }
-	 }
+	public void onBackPressed() {
+		if (System.currentTimeMillis() - mExitTime > INTERVAL) {
+			Toast.makeText(this, "再按一次返回键,可直接退出程序", Toast.LENGTH_SHORT).show();
+			mExitTime = System.currentTimeMillis();
+		} else {
+			finish();
+			android.os.Process.killProcess(android.os.Process.myPid());
+			System.exit(0);
+		}
+	}
 }
