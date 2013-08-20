@@ -8,7 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -349,13 +348,15 @@ public class UploadPhotoActivity extends Activity {
 	};
 	// 分享
 	private OnClickListener shareListener = new OnClickListener() {
+		String avatarPath1 = getBaseContext().getFilesDir().toString()
+				+ File.separator + picName + ".jpg";
 		public void onClick(View v) {
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("image/*");
 			intent.putExtra(Intent.EXTRA_SUBJECT, "分享");
 			intent.putExtra(Intent.EXTRA_STREAM,
-					Uri.fromFile(new File(avatarPath)));
-			intent.putExtra(Intent.EXTRA_TEXT, "可以分享了");
+					Uri.fromFile(new File(avatarPath1)));
+			intent.putExtra(Intent.EXTRA_TEXT, "亲！这张图片可以分享了~");
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(Intent.createChooser(intent, getTitle()));
 		}
